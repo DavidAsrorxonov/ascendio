@@ -103,3 +103,20 @@
     font: inherit;
   }
 }
+
+@layer utilities {
+  .landing-haze {
+    background:
+      linear-gradient(118deg, var(--color-surface) 0%, color-mix(in srgb, var(--color-accent-light) 88%, var(--color-surface)) 34%, color-mix(in srgb, var(--color-info-light) 86%, var(--color-surface)) 72%, var(--color-surface) 100%),
+      linear-gradient(22deg, color-mix(in srgb, var(--color-accent-muted) 82%, transparent) 0%, transparent 58%),
+      linear-gradient(180deg, var(--color-surface) 0%, var(--color-info-lightest) 100%);
+  }
+
+  .section-stripes {
+    background-image: repeating-linear-gradient(
+      -62deg,
+      color-mix(in srgb, var(--color-border-light) 42%, transparent) 0 1px,
+      transparent 1px 8px
+    );
+  }
+}

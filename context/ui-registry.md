@@ -18,4 +18,202 @@ After building any component — update this file with the component name, file 
 
 ## Components
 
-_Empty. Components will be added here as they are built._
+### Homepage Composition
+
+File: components/homepage/Homepage.tsx
+Last updated: 2026-06-06
+
+| Property         | Class                                                      |
+| ---------------- | ---------------------------------------------------------- |
+| Background       | `bg-surface`                                               |
+| Border           | `border-x border-border`                                  |
+| Border radius    | none                                                       |
+| Text — primary   | `text-text-slate`                                          |
+| Text — secondary | none                                                       |
+| Spacing          | component sections manage spacing                          |
+| Hover state      | none                                                       |
+| Shadow           | none                                                       |
+| Accent usage     | delegates to child components                              |
+
+**Pattern notes:**
+Homepage composition uses a centered `max-w-[1800px]` bordered shell. Individual sections own their visual rhythm.
+
+### Landing Navbar
+
+File: components/homepage/LandingNavbar.tsx
+Last updated: 2026-06-06
+
+| Property         | Class                                                |
+| ---------------- | ---------------------------------------------------- |
+| Background       | `bg-surface`                                         |
+| Border           | `border-b border-border`                             |
+| Border radius    | `rounded-md` on CTA                                  |
+| Text — primary   | `text-sm font-medium text-text-slate`                |
+| Text — secondary | none                                                 |
+| Spacing          | `h-16 px-5 md:px-12 lg:px-24 gap-10`                 |
+| Hover state      | `hover:text-accent`, `hover:bg-overlay-dark`         |
+| Shadow           | `shadow-card` on CTA                                 |
+| Accent usage     | `bg-overlay text-surface` for primary nav CTA        |
+
+**Pattern notes:**
+Navbar matches the project 64px header rule. Logo image uses `h-9 w-auto`; nav text and CTA are intentionally small to avoid screenshot-scale typography.
+
+### Landing Button
+
+File: components/homepage/LandingButton.tsx
+Last updated: 2026-06-06
+
+| Property         | Class                                                                  |
+| ---------------- | ---------------------------------------------------------------------- |
+| Background       | `bg-overlay`, `bg-surface/65`                                          |
+| Border           | `border border-border-muted` on secondary                              |
+| Border radius    | `rounded-md`                                                           |
+| Text — primary   | `text-sm md:text-base font-medium text-surface text-text-slate`        |
+| Text — secondary | none                                                                   |
+| Spacing          | `px-5 py-3 md:px-6`                                                    |
+| Hover state      | `hover:bg-overlay-dark`, `hover:bg-surface`, `transition-colors`       |
+| Shadow           | `shadow-card`                                                          |
+| Accent usage     | Primary action uses `bg-overlay`; secondary remains white/translucent  |
+
+**Pattern notes:**
+Use this button for homepage marketing CTAs. Avoid larger text sizes on landing buttons.
+
+### Landing Hero
+
+File: components/homepage/LandingHero.tsx
+Last updated: 2026-06-06
+
+| Property         | Class                                                                 |
+| ---------------- | --------------------------------------------------------------------- |
+| Background       | `landing-haze`                                                        |
+| Border           | `border-b border-border`                                              |
+| Border radius    | none                                                                  |
+| Text — primary   | `text-5xl md:text-[56px] lg:text-[64px] font-bold text-text-slate`    |
+| Text — secondary | `text-base md:text-lg font-normal leading-7 text-text-slate-medium`   |
+| Spacing          | `px-6 py-20 md:px-12 md:py-24 lg:py-28 mt-6 mt-8 gap-3`               |
+| Hover state      | inherited from `LandingButton`                                        |
+| Shadow           | inherited from `LandingButton`                                        |
+| Accent usage     | token-backed `landing-haze` utility in `app/globals.css`              |
+
+**Pattern notes:**
+Hero uses visible pastel gradient utility and a controlled desktop H1 cap of 64px.
+
+### Dashboard Preview
+
+File: components/homepage/DashboardPreview.tsx
+Last updated: 2026-06-06
+
+| Property         | Class                                      |
+| ---------------- | ------------------------------------------ |
+| Background       | `bg-surface-tertiary`                      |
+| Border           | `border-b border-border`                   |
+| Border radius    | none                                       |
+| Text — primary   | none                                       |
+| Text — secondary | none                                       |
+| Spacing          | `px-5 pt-12 md:px-20 md:pt-16`             |
+| Hover state      | none                                       |
+| Shadow           | asset includes mockup shadow               |
+| Accent usage     | none                                       |
+
+**Pattern notes:**
+Use supplied PNG mockups for preview fidelity; do not rebuild screenshot interiors in markup unless the design requires interaction.
+
+### Feature Split Section
+
+File: components/homepage/FeatureSplitSection.tsx
+Last updated: 2026-06-06
+
+| Property         | Class                                                                  |
+| ---------------- | ---------------------------------------------------------------------- |
+| Background       | `bg-surface`, `bg-surface-muted`                                       |
+| Border           | `border-b border-border`, `divide-y divide-border`, `border-l-2`       |
+| Border radius    | none                                                                   |
+| Text — primary   | `text-[38px] md:text-[44px] lg:text-[52px]`, `text-xl font-bold`       |
+| Text — secondary | `text-base md:text-lg font-normal leading-7 text-text-slate-medium`    |
+| Spacing          | `px-8 py-14 md:px-16 lg:py-16`, row `px-8 py-8 md:px-16`               |
+| Hover state      | none                                                                   |
+| Shadow           | none                                                                   |
+| Accent usage     | `border-l-accent`, `border-l-success`                                  |
+
+**Pattern notes:**
+Use this shared section for two-column marketing feature bands. It intentionally reduces heading, body, and image max widths so sections do not dominate the viewport.
+
+### Striped Divider
+
+File: components/homepage/StripedDivider.tsx
+Last updated: 2026-06-06
+
+| Property         | Class                         |
+| ---------------- | ----------------------------- |
+| Background       | `section-stripes`             |
+| Border           | `border-b border-border`      |
+| Border radius    | none                          |
+| Text — primary   | none                          |
+| Text — secondary | none                          |
+| Spacing          | `h-20`                        |
+| Hover state      | none                          |
+| Shadow           | none                          |
+| Accent usage     | none                          |
+
+**Pattern notes:**
+Divider uses a token-backed global utility to recreate the light hatched bands from the reference.
+
+### Testimonial Section
+
+File: components/homepage/TestimonialSection.tsx
+Last updated: 2026-06-06
+
+| Property         | Class                                                                 |
+| ---------------- | --------------------------------------------------------------------- |
+| Background       | `bg-surface`                                                          |
+| Border           | `border-b border-border`, avatar `border border-border`               |
+| Border radius    | `rounded-md` avatar                                                   |
+| Text — primary   | `text-[28px] md:text-[36px] font-medium text-text-slate`              |
+| Text — secondary | `text-sm font-normal text-text-slate-medium`                          |
+| Spacing          | `px-8 py-18 md:px-24 md:py-24 mt-8 gap-4`                             |
+| Hover state      | none                                                                  |
+| Shadow           | none                                                                  |
+| Accent usage     | `text-accent` eyebrow                                                 |
+
+**Pattern notes:**
+Testimonial quote scale should stay below hero scale.
+
+### Landing CTA
+
+File: components/homepage/LandingCta.tsx
+Last updated: 2026-06-06
+
+| Property         | Class                                                               |
+| ---------------- | ------------------------------------------------------------------- |
+| Background       | `landing-haze`                                                      |
+| Border           | `border-b border-border`                                            |
+| Border radius    | inherited from `LandingButton`                                      |
+| Text — primary   | `text-[42px] md:text-[56px] font-bold text-text-slate`              |
+| Text — secondary | `text-base md:text-lg font-normal leading-7 text-text-slate-medium` |
+| Spacing          | `px-6 py-20 md:px-12 md:py-24 mt-6 mt-8 gap-3`                      |
+| Hover state      | inherited from `LandingButton`                                      |
+| Shadow           | inherited from `LandingButton`                                      |
+| Accent usage     | token-backed `landing-haze` utility                                 |
+
+**Pattern notes:**
+Bottom CTA is slightly smaller than hero and reuses the same button scale.
+
+### Landing Footer
+
+File: components/homepage/LandingFooter.tsx
+Last updated: 2026-06-06
+
+| Property         | Class                                         |
+| ---------------- | --------------------------------------------- |
+| Background       | `bg-surface`                                  |
+| Border           | none                                          |
+| Border radius    | none                                          |
+| Text — primary   | `text-sm font-normal text-text-slate`         |
+| Text — secondary | none                                          |
+| Spacing          | `px-8 py-14 md:px-16 gap-8 sm:gap-10`         |
+| Hover state      | `hover:text-accent`                           |
+| Shadow           | none                                          |
+| Accent usage     | hover only                                    |
+
+**Pattern notes:**
+Footer logo matches navbar logo at `h-9 w-auto`; footer nav is deliberately small and quiet.

@@ -6,9 +6,9 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ## Current Status
 
-**Phase:**
-**Last completed:**
-**Next:**
+**Phase:** Phase 1 — Foundation
+**Last completed:** 01 Homepage
+**Next:** 02 Auth
 
 ---
 
@@ -16,7 +16,7 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ### Phase 1 — Foundation
 
-- [ ] 01 Homepage
+- [x] 01 Homepage
 - [ ] 02 Auth
 - [ ] 03 PostHog Initialization
 - [ ] 04 Database Schema
@@ -50,10 +50,14 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ## Decisions Made During Build
 
-_Add decisions here as they are made during implementation._
+- 2026-06-06 — Homepage built directly in `app/page.tsx` as a Server Component because Feature 01 is static UI with no interaction state.
+- 2026-06-06 — Reused supplied assets from `public/`: `logo.png`, `dashboard-demo.png`, `jobs-lists.png`, `agnet-log.png`, and `user-icon.png` to match `context/designs/landing-page.png`.
+- 2026-06-06 — Added token-backed global utilities `landing-haze` and `section-stripes` in `app/globals.css` so decorative backgrounds avoid hardcoded component colors.
+- 2026-06-06 — Refactored homepage into separate components under `components/homepage/` and reduced landing typography/button scale after visual feedback.
 
 ---
 
 ## Notes
 
-_Add notes here as the build progresses — workarounds, patterns, anything that differs from the context files._
+- 2026-06-06 — `npm run build` required network access for `next/font/google` to fetch Inter; build passes after approval.
+- 2026-06-06 — Hero and CTA gradient is handled by the `landing-haze` utility, using only existing design tokens and CSS color mixing.
