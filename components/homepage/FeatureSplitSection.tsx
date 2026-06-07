@@ -42,7 +42,7 @@ export function FeatureSplitSection({
           }`}
         >
           <div className="border-b border-border px-8 py-14 md:px-16 lg:py-16">
-            <h2 className="max-w-[620px] text-[38px] font-bold leading-[1.12] text-text-slate md:text-[44px] lg:text-[52px]">
+            <h2 className="max-w-155 text-[38px] font-bold leading-[1.12] text-text-slate md:text-[44px] lg:text-[52px]">
               {title}
             </h2>
           </div>
@@ -57,7 +57,7 @@ export function FeatureSplitSection({
                 <h3 className="text-xl font-bold leading-7 text-text-slate">
                   {item.title}
                 </h3>
-                <p className="mt-3 max-w-[680px] text-base font-normal leading-7 text-text-slate-medium md:text-lg">
+                <p className="mt-3 max-w-170 text-base font-normal leading-7 text-text-slate-medium md:text-lg">
                   {item.description}
                 </p>
               </div>
