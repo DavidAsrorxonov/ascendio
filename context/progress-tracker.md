@@ -7,8 +7,8 @@ Update this file after every completed feature. Any AI agent reading this should
 ## Current Status
 
 **Phase:** Phase 1 — Foundation
-**Last completed:** 01 Homepage
-**Next:** 02 Auth
+**Last completed:** 02 Auth
+**Next:** 03 PostHog Initialization
 
 ---
 
@@ -17,7 +17,7 @@ Update this file after every completed feature. Any AI agent reading this should
 ### Phase 1 — Foundation
 
 - [x] 01 Homepage
-- [ ] 02 Auth
+- [x] 02 Auth
 - [ ] 03 PostHog Initialization
 - [ ] 04 Database Schema
 
@@ -54,6 +54,8 @@ Update this file after every completed feature. Any AI agent reading this should
 - 2026-06-06 — Reused supplied assets from `public/`: `logo.png`, `dashboard-demo.png`, `jobs-lists.png`, `agnet-log.png`, and `user-icon.png` to match `context/designs/landing-page.png`.
 - 2026-06-06 — Added token-backed global utilities `landing-haze` and `section-stripes` in `app/globals.css` so decorative backgrounds avoid hardcoded component colors.
 - 2026-06-06 — Refactored homepage into separate components under `components/homepage/` and reduced landing typography/button scale after visual feedback.
+- 2026-06-08 — Auth implemented with `@insforge/sdk` SSR helpers from the latest InsForge MCP docs: browser/server clients, refresh route, OAuth login, callback finalizer, and Next 16 `proxy.ts` protection.
+- 2026-06-08 — Used `proxy.ts` instead of `middleware.ts` because installed Next 16 docs mark middleware as renamed/deprecated.
 
 ---
 
@@ -61,3 +63,6 @@ Update this file after every completed feature. Any AI agent reading this should
 
 - 2026-06-06 — `npm run build` required network access for `next/font/google` to fetch Inter; build passes after approval.
 - 2026-06-06 — Hero and CTA gradient is handled by the `landing-haze` utility, using only existing design tokens and CSS color mixing.
+- 2026-06-08 — `npm run lint` passes.
+- 2026-06-08 — `npm run build` passes after network approval for the existing Inter font fetch.
+- 2026-06-08 — Local browser QA not run by agent because the developer chose to run the dev server locally.

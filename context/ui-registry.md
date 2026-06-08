@@ -217,3 +217,63 @@ Last updated: 2026-06-06
 
 **Pattern notes:**
 Footer logo matches navbar logo at `h-9 w-auto`; footer nav is deliberately small and quiet.
+
+### Auth Login Panel
+
+File: components/auth/LoginPanel.tsx
+Last updated: 2026-06-08
+
+| Property         | Class                                                                                                      |
+| ---------------- | ---------------------------------------------------------------------------------------------------------- |
+| Background       | `bg-surface`, provider mark `bg-surface-secondary`                                                         |
+| Border           | `border border-border`                                                                                    |
+| Border radius    | `rounded-xl` panel, `rounded-md` buttons, `rounded-full` provider mark                                    |
+| Text — primary   | `text-2xl font-semibold text-text-primary`, button `text-sm font-medium text-text-primary`                 |
+| Text — secondary | `text-sm font-normal text-text-secondary`, caption `text-xs font-medium uppercase text-accent`             |
+| Spacing          | `p-6`, `mt-6 flex flex-col gap-3`, buttons `h-12 px-4 py-2 gap-3`, message `px-3 py-2`                    |
+| Hover state      | `hover:bg-surface-secondary`, `disabled:cursor-not-allowed disabled:text-text-muted`                       |
+| Shadow           | `shadow-card`                                                                                              |
+| Accent usage     | `text-accent` eyebrow only                                                                                 |
+
+**Pattern notes:**
+Auth panels use the standard white card surface and token borders. OAuth buttons stay secondary-style with provider marks instead of introducing provider brand colors.
+
+### Auth Login Fallback
+
+File: components/auth/LoginPanelFallback.tsx
+Last updated: 2026-06-08
+
+| Property         | Class                                                                                          |
+| ---------------- | ---------------------------------------------------------------------------------------------- |
+| Background       | `bg-surface`                                                                                   |
+| Border           | `border border-border`                                                                         |
+| Border radius    | `rounded-xl`                                                                                   |
+| Text — primary   | `text-2xl font-semibold text-text-primary`                                                      |
+| Text — secondary | `text-sm font-normal text-text-secondary`, caption `text-xs font-medium uppercase text-accent` |
+| Spacing          | `p-6`, `mt-3`, `mt-2`                                                                          |
+| Hover state      | none                                                                                           |
+| Shadow           | `shadow-card`                                                                                  |
+| Accent usage     | `text-accent` eyebrow only                                                                     |
+
+**Pattern notes:**
+Fallback mirrors the login panel shell so Suspense loading does not shift the auth page visual hierarchy.
+
+### Auth Callback Panel
+
+File: components/auth/AuthCallbackPanel.tsx
+Last updated: 2026-06-08
+
+| Property         | Class                                                                     |
+| ---------------- | ------------------------------------------------------------------------- |
+| Background       | `bg-surface`, indicator outer `bg-accent-muted`, indicator inner `bg-accent` |
+| Border           | `border border-border`                                                    |
+| Border radius    | `rounded-xl` panel, `rounded-full` indicator                              |
+| Text — primary   | `text-base font-semibold text-text-primary`                               |
+| Text — secondary | `text-sm font-normal text-text-secondary`                                 |
+| Spacing          | `p-6`, `mt-4`, `mt-2`, indicator `p-2`                                    |
+| Hover state      | none                                                                      |
+| Shadow           | `shadow-card`                                                             |
+| Accent usage     | `bg-accent-muted`, `bg-accent` status indicator                           |
+
+**Pattern notes:**
+Callback state uses the same auth card shell with a compact accent indicator instead of a decorative loader or new animation pattern.
