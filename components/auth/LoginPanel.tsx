@@ -1,5 +1,6 @@
 "use client";
 
+import { GitBranch, Globe, ShieldCheck } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -15,11 +16,6 @@ type AuthStatus = "idle" | "loading" | "checking";
 const providerLabels: Record<OAuthProvider, string> = {
   google: "Continue with Google",
   github: "Continue with GitHub",
-};
-
-const providerMarks: Record<OAuthProvider, string> = {
-  google: "G",
-  github: "GH",
 };
 
 export function LoginPanel() {
@@ -108,50 +104,75 @@ export function LoginPanel() {
   }
 
   return (
-    <section className="w-full max-w-112 rounded-xl border border-border bg-surface p-6 shadow-card">
-      <div>
-        <p className="text-xs font-medium uppercase tracking-normal text-accent">
-          Welcome back
-        </p>
-        <h1 className="mt-3 text-2xl font-semibold leading-8 text-text-primary">
-          Sign in to Ascendio
+    <section className="grid overflow-hidden rounded-xl border border-border bg-surface shadow-card lg:grid-cols-[1.08fr_0.92fr]">
+      <div className="landing-haze border-b border-border px-6 py-10 md:px-10 md:py-14 lg:border-b-0 lg:border-r lg:px-12 lg:py-16">
+        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/75 px-3 py-1 text-xs font-medium text-text-secondary shadow-card">
+          <ShieldCheck aria-hidden="true" className="h-4 w-4 text-accent" />
+          <span>OAuth secured by InsForge</span>
+        </div>
+
+        <h1 className="mt-9 max-w-120 text-[42px] font-bold leading-[1.08] text-text-slate md:text-[52px]">
+          Sign in and let the agent prep your next application.
         </h1>
-        <p className="mt-2 text-sm font-normal leading-6 text-text-secondary">
-          Use your Google or GitHub account to access your job search workspace.
+        <p className="mt-6 max-w-115 text-base font-normal leading-7 text-text-slate-medium md:text-lg">
+          Connect with Google or GitHub to start building your profile, matching
+          jobs, and creating tailored application materials.
+        </p>
+        <p className="mt-12 text-sm font-medium leading-5 text-text-secondary">
+          New users are routed to profile setup after sign-in.
         </p>
       </div>
 
-      <div className="mt-6 flex flex-col gap-3">
-        {(["google", "github"] as const).map((provider) => {
-          const isActive = activeProvider === provider;
-          const isDisabled = status !== "idle";
+      <div className="flex items-center px-6 py-10 md:px-12 lg:px-14">
+        <div className="w-full">
+          <p className="text-sm font-normal leading-5 text-text-secondary">
+            Welcome to
+          </p>
+          <h2 className="mt-2 text-[28px] font-semibold leading-9 text-text-primary">
+            Ascendio
+          </h2>
+          <p className="mt-4 text-sm font-normal leading-5 text-text-secondary">
+            Choose your preferred provider to continue.
+          </p>
 
-          return (
-            <button
-              key={provider}
-              type="button"
-              disabled={isDisabled}
-              onClick={() => {
-                void handleOAuth(provider);
-              }}
-              className="flex h-12 w-full items-center justify-center gap-3 rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-text-primary shadow-card transition-colors hover:bg-surface-secondary disabled:cursor-not-allowed disabled:text-text-muted"
-            >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-surface-secondary text-xs font-semibold text-text-dark">
-                {providerMarks[provider]}
-              </span>
-              <span>
-                {isActive ? "Redirecting..." : providerLabels[provider]}
-              </span>
-            </button>
-          );
-        })}
+          <div className="mt-10 flex flex-col gap-3">
+            {(["google", "github"] as const).map((provider) => {
+              const isActive = activeProvider === provider;
+              const isDisabled = status !== "idle";
+
+              return (
+                <button
+                  key={provider}
+                  type="button"
+                  disabled={isDisabled}
+                  onClick={() => {
+                    void handleOAuth(provider);
+                  }}
+                  className="flex h-12 w-full items-center justify-center gap-3 rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-surface-secondary disabled:cursor-not-allowed disabled:text-text-muted"
+                >
+                  {provider === "google" ? (
+                    <Globe aria-hidden="true" className="h-5 w-5 text-accent" />
+                  ) : (
+                    <GitBranch
+                      aria-hidden="true"
+                      className="h-5 w-5 text-text-primary"
+                    />
+                  )}
+                  <span>
+                    {isActive ? "Redirecting..." : providerLabels[provider]}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {visibleMessage ? (
+            <p className="mt-4 rounded-md border border-border bg-surface-secondary px-3 py-2 text-sm font-normal leading-5 text-text-secondary">
+              {visibleMessage}
+            </p>
+          ) : null}
+        </div>
       </div>
-
-      {visibleMessage ? (
-        <p className="mt-4 rounded-md border border-border bg-surface-secondary px-3 py-2 text-sm font-normal leading-5 text-text-secondary">
-          {visibleMessage}
-        </p>
-      ) : null}
     </section>
   );
 }

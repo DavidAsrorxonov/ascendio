@@ -56,6 +56,8 @@ Update this file after every completed feature. Any AI agent reading this should
 - 2026-06-06 — Refactored homepage into separate components under `components/homepage/` and reduced landing typography/button scale after visual feedback.
 - 2026-06-08 — Auth implemented with `@insforge/sdk` SSR helpers from the latest InsForge MCP docs: browser/server clients, refresh route, OAuth login, callback finalizer, and Next 16 `proxy.ts` protection.
 - 2026-06-08 — Used `proxy.ts` instead of `middleware.ts` because installed Next 16 docs mark middleware as renamed/deprecated.
+- 2026-06-08 — Login UI revised to match the supplied split-card reference: navbar, left marketing panel, right OAuth provider controls, and smaller left headline scale.
+- 2026-06-08 — OAuth button icons switched to `lucide-react`: Google uses `Globe` in accent color, GitHub uses `GitBranch` in default text color.
 
 ---
 

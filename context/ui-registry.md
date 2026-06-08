@@ -223,40 +223,40 @@ Footer logo matches navbar logo at `h-9 w-auto`; footer nav is deliberately smal
 File: components/auth/LoginPanel.tsx
 Last updated: 2026-06-08
 
-| Property         | Class                                                                                                      |
-| ---------------- | ---------------------------------------------------------------------------------------------------------- |
-| Background       | `bg-surface`, provider mark `bg-surface-secondary`                                                         |
-| Border           | `border border-border`                                                                                    |
-| Border radius    | `rounded-xl` panel, `rounded-md` buttons, `rounded-full` provider mark                                    |
-| Text — primary   | `text-2xl font-semibold text-text-primary`, button `text-sm font-medium text-text-primary`                 |
-| Text — secondary | `text-sm font-normal text-text-secondary`, caption `text-xs font-medium uppercase text-accent`             |
-| Spacing          | `p-6`, `mt-6 flex flex-col gap-3`, buttons `h-12 px-4 py-2 gap-3`, message `px-3 py-2`                    |
-| Hover state      | `hover:bg-surface-secondary`, `disabled:cursor-not-allowed disabled:text-text-muted`                       |
-| Shadow           | `shadow-card`                                                                                              |
-| Accent usage     | `text-accent` eyebrow only                                                                                 |
+| Property         | Class                                                                                                                       |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Background       | `bg-surface`, left panel `landing-haze`, badge `bg-surface/75`                                                              |
+| Border           | `border border-border`, split divider `lg:border-r`, mobile divider `border-b border-border`                                |
+| Border radius    | `rounded-xl` shell, `rounded-full` badge, `rounded-md` buttons                                                              |
+| Text — primary   | left headline `text-[42px] md:text-[52px] font-bold text-text-slate`, right title `text-[28px] font-semibold text-text-primary` |
+| Text — secondary | `text-base md:text-lg font-normal text-text-slate-medium`, right copy `text-sm font-normal text-text-secondary`             |
+| Spacing          | shell `grid`, left `px-6 py-10 md:px-10 md:py-14 lg:px-12 lg:py-16`, right `px-6 py-10 md:px-12 lg:px-14`, buttons `h-12 px-4 py-2 gap-3` |
+| Hover state      | `hover:bg-surface-secondary`, `disabled:cursor-not-allowed disabled:text-text-muted`                                        |
+| Shadow           | `shadow-card` on shell and badge                                                                                            |
+| Accent usage     | Lucide `Globe` and `ShieldCheck` use `text-accent`, Lucide `GitBranch` uses `text-text-primary`, token-backed `landing-haze` |
 
 **Pattern notes:**
-Auth panels use the standard white card surface and token borders. OAuth buttons stay secondary-style with provider marks instead of introducing provider brand colors.
+Login uses a wide two-column card with a soft token-backed left haze and compact right-side OAuth controls. OAuth buttons use Lucide icons: `Globe` for Google in the accent token and `GitBranch` for GitHub in default text color. The left headline is intentionally smaller than the reference image while keeping the stacked bold rhythm.
 
 ### Auth Login Fallback
 
 File: components/auth/LoginPanelFallback.tsx
 Last updated: 2026-06-08
 
-| Property         | Class                                                                                          |
-| ---------------- | ---------------------------------------------------------------------------------------------- |
-| Background       | `bg-surface`                                                                                   |
-| Border           | `border border-border`                                                                         |
-| Border radius    | `rounded-xl`                                                                                   |
-| Text — primary   | `text-2xl font-semibold text-text-primary`                                                      |
-| Text — secondary | `text-sm font-normal text-text-secondary`, caption `text-xs font-medium uppercase text-accent` |
-| Spacing          | `p-6`, `mt-3`, `mt-2`                                                                          |
-| Hover state      | none                                                                                           |
-| Shadow           | `shadow-card`                                                                                  |
-| Accent usage     | `text-accent` eyebrow only                                                                     |
+| Property         | Class                                                                                                                       |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Background       | `bg-surface`, left panel `landing-haze`, loading bars `bg-surface-secondary`                                                |
+| Border           | `border border-border`, split divider `lg:border-r`, mobile divider `border-b border-border`                                |
+| Border radius    | `rounded-xl` shell, `rounded-full` loading badge, `rounded-md` loading bars                                                 |
+| Text — primary   | `text-[42px] md:text-[52px] font-bold text-text-slate`, right title `text-[28px] font-semibold text-text-primary`           |
+| Text — secondary | `text-base md:text-lg font-normal text-text-slate-medium`, right copy `text-sm font-normal text-text-secondary`             |
+| Spacing          | left `px-6 py-10 md:px-10 md:py-14 lg:px-12 lg:py-16`, right `px-6 py-10 md:px-12 lg:px-14`, loading bars `mt-10 h-12`, `mt-3 h-12` |
+| Hover state      | none                                                                                                                        |
+| Shadow           | `shadow-card` on shell and loading badge                                                                                    |
+| Accent usage     | token-backed `landing-haze`                                                                                                 |
 
 **Pattern notes:**
-Fallback mirrors the login panel shell so Suspense loading does not shift the auth page visual hierarchy.
+Fallback mirrors the split login shell so Suspense loading does not shift the auth page layout.
 
 ### Auth Callback Panel
 
