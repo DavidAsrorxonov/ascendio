@@ -7,8 +7,8 @@ Update this file after every completed feature. Any AI agent reading this should
 ## Current Status
 
 **Phase:** Phase 1 — Foundation
-**Last completed:** 03 PostHog Initialization
-**Next:** 04 Database Schema
+**Last completed:** 04 Database Schema
+**Next:** 05 Profile Page — Full UI
 
 ---
 
@@ -19,7 +19,7 @@ Update this file after every completed feature. Any AI agent reading this should
 - [x] 01 Homepage
 - [x] 02 Auth
 - [x] 03 PostHog Initialization
-- [ ] 04 Database Schema
+- [x] 04 Database Schema
 
 ### Phase 2 — Profile Page
 
@@ -76,3 +76,5 @@ Update this file after every completed feature. Any AI agent reading this should
 - 2026-06-09 — `npm run lint` and `npm run build` pass after adding placeholder app pages; build still needs network access for the existing Inter font fetch.
 - 2026-06-09 — Review fixes complete: post-login redirect matches the build plan, protected routes no longer trust cookie presence alone, and sign-out reports local cookie clear failures instead of silently redirecting.
 - 2026-06-09 — PostHog setup verified with `npm run lint` and `npm run build`; build still requires network access for the existing Inter font fetch.
+- 2026-06-09 — Database schema created directly in InsForge through MCP infrastructure tools. `profiles`, `agent_runs`, `jobs`, and `agent_logs` are live with ownership-scoped RLS policies using `auth.uid()`, practical constraints, indexes, and timestamp triggers.
+- 2026-06-09 — Created private InsForge Storage bucket `resumes` for authenticated resume PDF access. No tailoring-specific columns were added because resume tailoring is out of scope.

@@ -18,6 +18,26 @@ After building any component — update this file with the component name, file 
 
 ## Components
 
+### Database Schema
+
+File: InsForge backend
+Last updated: 2026-06-09
+
+| Property         | Class                  |
+| ---------------- | ---------------------- |
+| Background       | none                   |
+| Border           | none                   |
+| Border radius    | none                   |
+| Text — primary   | none                   |
+| Text — secondary | none                   |
+| Spacing          | none                   |
+| Hover state      | none                   |
+| Shadow           | none                   |
+| Accent usage     | none                   |
+
+**Pattern notes:**
+Feature 04 is backend-only. It created the live InsForge tables, ownership RLS policies, indexes, and private `resumes` storage bucket; no UI components or visual classes were introduced.
+
 ### Homepage Composition
 
 File: components/homepage/Homepage.tsx
