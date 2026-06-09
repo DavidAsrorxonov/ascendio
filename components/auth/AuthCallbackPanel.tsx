@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 
 import {
@@ -44,7 +45,11 @@ export function AuthCallbackPanel() {
 
         const sessionResponse = await fetch("/api/auth/session", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-POSTHOG-DISTINCT-ID": posthog.get_distinct_id(),
+            "X-POSTHOG-SESSION-ID": posthog.get_session_id() ?? "",
+          },
           body: JSON.stringify({
             code,
             codeVerifier,
@@ -61,14 +66,26 @@ export function AuthCallbackPanel() {
 
         if (!sessionResponse.ok) {
           console.error("[auth/callback]", await sessionResponse.text());
+          posthog.capture("sign_in_failed", { reason: "session_error" });
           setMessage("Sign in could not be completed. Please try again.");
           router.replace("/login");
           return;
         }
 
+        const sessionData = (await sessionResponse.json()) as {
+          data?: { user?: { id?: string; email?: string } };
+        };
+        const user = sessionData.data?.user;
+        if (user?.id) {
+          posthog.identify(user.id, { email: user.email });
+        }
+        posthog.capture("sign_in_completed");
+
         router.replace("/dashboard");
       } catch (error) {
         console.error("[auth/callback]", error);
+        posthog.captureException(error);
+        posthog.capture("sign_in_failed", { reason: "exception" });
         setMessage("Sign in could not be completed. Please try again.");
         router.replace("/login");
       }

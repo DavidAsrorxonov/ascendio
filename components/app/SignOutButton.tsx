@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import posthog from "posthog-js";
 import { useState } from "react";
 
 import { getInsforgeBrowserClient } from "@/lib/insforge-client";
@@ -11,6 +12,7 @@ export function SignOutButton() {
   const [message, setMessage] = useState<string | null>(null);
 
   async function handleSignOut(): Promise<void> {
+    posthog.capture("sign_out_clicked");
     setIsSigningOut(true);
     setMessage(null);
 
@@ -24,6 +26,9 @@ export function SignOutButton() {
 
       const response = await fetch("/api/auth/sign-out", {
         method: "POST",
+        headers: {
+          "X-POSTHOG-DISTINCT-ID": posthog.get_distinct_id(),
+        },
       });
 
       if (!response.ok) {
@@ -33,6 +38,7 @@ export function SignOutButton() {
         return;
       }
 
+      posthog.reset();
       router.replace("/login");
       router.refresh();
     } catch (error) {

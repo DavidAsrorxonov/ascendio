@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import posthog from "posthog-js";
 import type { ReactNode } from "react";
 
 type Props = {
@@ -16,6 +19,9 @@ export function LandingButton({ children, href, variant }: Props) {
   return (
     <Link
       href={href}
+      onClick={() => {
+        posthog.capture("cta_clicked", { variant, href });
+      }}
       className={`rounded-md px-5 py-3 text-sm font-medium shadow-card transition-colors md:px-6 md:text-base ${classes}`}
     >
       {children}
