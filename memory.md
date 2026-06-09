@@ -1,65 +1,73 @@
-# Memory — Homepage Foundation
+# Memory — Auth Foundation
 
-Last updated: 2026-06-06 22:46 JST
+Last updated: 2026-06-09 15:03 JST
 
 ## What was built
 
-Completed Feature 01 Homepage from the build plan.
+Completed Phase 1 Feature 02 Auth from the build plan.
 
-Files modified:
+- Added InsForge auth foundation with Google and GitHub OAuth, `/login`, `/callback`, session route, refresh route, sign-out route, and Next 16 `proxy.ts` protection.
+- Added protected placeholder pages for `/dashboard`, `/profile`, and `/find-jobs` so authenticated navigation no longer lands on 404s.
+- Built auth UI matching the supplied split-card reference, using `lucide-react` icons: Google uses `Globe` with `text-accent`, GitHub uses `GitBranch` with `text-text-primary`.
+- Added a working sign-out button with an inline token-based error state when local cookie clearing fails.
+- Updated `context/progress-tracker.md` and `context/ui-registry.md` for auth, protected placeholder pages, and review fixes.
 
-- `app/page.tsx` now renders the composed `Homepage` component.
-- `app/layout.tsx` metadata updated to Ascendio.
-- `app/globals.css` now includes token-backed `landing-haze` and `section-stripes` utilities.
-- `context/progress-tracker.md` marks Phase 1 Feature 01 Homepage complete and sets next feature to Auth.
-- `context/ui-registry.md` records homepage component visual patterns.
+Important files:
 
-Files created:
-
-- `components/homepage/Homepage.tsx`
-- `components/homepage/LandingNavbar.tsx`
-- `components/homepage/LandingHero.tsx`
-- `components/homepage/LandingButton.tsx`
-- `components/homepage/DashboardPreview.tsx`
-- `components/homepage/FeatureSplitSection.tsx`
-- `components/homepage/StripedDivider.tsx`
-- `components/homepage/TestimonialSection.tsx`
-- `components/homepage/LandingCta.tsx`
-- `components/homepage/LandingFooter.tsx`
-
-The homepage uses supplied assets from `public/`: `logo.png`, `images/dashboard-demo.png`, `images/jobs-lists.png`, `images/agnet-log.png`, and `images/user-icon.png`.
+- `app/(auth)/login/page.tsx`
+- `app/(auth)/callback/page.tsx`
+- `app/api/auth/session/route.ts`
+- `app/api/auth/refresh/route.ts`
+- `app/api/auth/sign-out/route.ts`
+- `proxy.ts`
+- `lib/insforge-client.ts`
+- `lib/insforge-server.ts`
+- `components/auth/LoginPanel.tsx`
+- `components/auth/AuthCallbackPanel.tsx`
+- `components/app/AppShell.tsx`
+- `components/app/AppPlaceholderPage.tsx`
+- `components/app/AppPlaceholderCard.tsx`
+- `components/app/SignOutButton.tsx`
 
 ## Decisions made
 
-- Homepage is static UI only and implemented as Server Components.
-- Landing UI is split into focused components under `components/homepage/`.
-- Shared CTA styling lives in `LandingButton`.
-- The two feature bands use shared `FeatureSplitSection` to keep sizing consistent.
-- Decorative hero/CTA gradient and stripe divider are token-backed utilities in `app/globals.css`, avoiding raw component colors.
-- CTA links currently point to `/login` and `/find-jobs` as placeholders until Auth is built.
+- Use `proxy.ts` instead of `middleware.ts` because installed Next 16 docs mark middleware as renamed/deprecated.
+- Redirect authenticated users to `/dashboard` after OAuth, matching `context/project-overview.md` and `context/build-plan.md`.
+- Keep OAuth UI custom instead of using prebuilt InsForge auth components.
+- Use InsForge SSR helpers for server-owned cookies: callback sends only `insforge_code` and the PKCE verifier to `/api/auth/session`; the route exchanges the code server-side before setting cookies.
+- Protected routes verify the current InsForge user via `getCurrentUser()` before allowing access, instead of trusting cookie presence alone.
+- Placeholder app pages intentionally stay minimal until the full Profile, Find Jobs, and Dashboard features are built.
 
 ## Problems solved
 
-- Initial implementation was too large compared with `context/designs/landing-page.png`; typography, buttons, feature sections, and preview image max widths were reduced.
-- Hero/background gradient was too subtle; `landing-haze` was strengthened using existing design tokens and CSS color mixing.
-- JSX lint errors from unescaped quotes/apostrophes were fixed.
-- `npm run build` may need network access because `next/font/google` fetches Inter; build passed after approval.
+- OAuth start initially failed because `.env.local` had `NEXT_PUBLIC_INSFORGE_URL` set to the anon key instead of the backend URL. It was corrected to `https://u3vy75bd.us-east.insforge.app`.
+- Google OAuth previously returned to `/login?reason=protected` because browser SDK session state was not available as app-domain cookies. Fixed by exchanging the OAuth code through `/api/auth/session` and setting InsForge cookies on the app response.
+- Review found three auth issues and they were fixed:
+  - callback redirect now matches `/dashboard`;
+  - session route no longer accepts raw browser-posted access tokens;
+  - sign-out no longer silently redirects when local cookie clearing fails.
+- `next/font/google` still needs network access during `npm run build` to fetch Inter. Build passes when network access is approved.
 
 ## Current state
 
+- `context/progress-tracker.md` marks Phase 1 Feature 02 Auth complete.
+- Next planned feature is Phase 1 Feature 03 PostHog Initialization.
 - `npm run lint` passes.
-- `npm run build` passes.
-- `git diff --check` passes.
-- Browser visual QA was not run by the assistant because the user said they will run the dev server themselves.
-- Working tree has uncommitted homepage-related changes.
+- `npm run build` passes with network access for the existing Inter Google Font fetch.
+- Working tree is clean at the time this memory was saved.
+- Browser/dev-server QA was not run by the assistant because the developer said they will run the app themselves.
 
 ## Next session starts with
 
-Run `/remember restore`, then have the user confirm whether the homepage looks correct in their local browser. If approved, start Feature 02 Auth from `context/build-plan.md`: InsForge Google/GitHub OAuth, callback route, session handling, and middleware protection for `/dashboard`, `/profile`, `/find-jobs`, and `/find-jobs/[id]`.
+Run `/remember restore`, then start Phase 1 Feature 03 PostHog Initialization:
 
-Before Auth implementation, read the relevant Next.js 16 docs in `node_modules/next/dist/docs/` and check for any InsForge-specific skill/MCP availability per `context/library-docs.md`.
+- fetch/read current docs for any library/API touched;
+- create `lib/posthog-client.ts` and `lib/posthog-server.ts`;
+- initialize PostHog in the root app layout;
+- wire `posthog.identify()` after successful login and `posthog.reset()` on logout;
+- update `context/progress-tracker.md` and `context/ui-registry.md` if any UI changes are made.
 
 ## Open questions
 
-- Does the adjusted homepage match the user’s visual expectations when they run `npm run dev` locally?
-- Exact InsForge project configuration and OAuth redirect URLs still need to be verified before Auth wiring.
+- Developer still needs to confirm the OAuth flow visually in their local browser.
+- Database schema and RLS are not created yet; that is Phase 1 Feature 04 after PostHog.
