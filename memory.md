@@ -1,73 +1,63 @@
-# Memory — Auth Foundation
+# Memory — PostHog Initialization Review
 
-Last updated: 2026-06-09 15:03 JST
+Last updated: 2026-06-09 21:51 JST
 
 ## What was built
 
-Completed Phase 1 Feature 02 Auth from the build plan.
+Phase 1 Feature 03 PostHog Initialization is currently implemented in the working tree.
 
-- Added InsForge auth foundation with Google and GitHub OAuth, `/login`, `/callback`, session route, refresh route, sign-out route, and Next 16 `proxy.ts` protection.
-- Added protected placeholder pages for `/dashboard`, `/profile`, and `/find-jobs` so authenticated navigation no longer lands on 404s.
-- Built auth UI matching the supplied split-card reference, using `lucide-react` icons: Google uses `Globe` with `text-accent`, GitHub uses `GitBranch` with `text-text-primary`.
-- Added a working sign-out button with an inline token-based error state when local cookie clearing fails.
-- Updated `context/progress-tracker.md` and `context/ui-registry.md` for auth, protected placeholder pages, and review fixes.
+- Added `lib/posthog-client.ts` with typed helpers for the four approved product events, browser initialization, `identifyPostHogUser()`, and `resetPostHog()`.
+- Added `lib/posthog-server.ts` with a typed server capture helper using `posthog-node`, `flushAt: 1`, `flushInterval: 0`, and `shutdown()` in a `finally` block.
+- Added `components/analytics/PostHogProvider.tsx` and wrapped the root layout in it.
+- `instrumentation-client.ts` also initializes PostHog through the shared helper.
+- OAuth callback now identifies the PostHog user after the InsForge session is created; sign-out resets PostHog after auth cookies are cleared.
+- Removed previously wizard-added custom auth/CTA event captures from app code, because `context/code-standards.md` allows only `job_search_started`, `job_found`, `profile_completed`, and `company_researched`.
+- Updated `context/progress-tracker.md`, `context/ui-registry.md`, and `posthog-setup-report.md` for the current PostHog state.
 
 Important files:
 
-- `app/(auth)/login/page.tsx`
-- `app/(auth)/callback/page.tsx`
-- `app/api/auth/session/route.ts`
-- `app/api/auth/refresh/route.ts`
-- `app/api/auth/sign-out/route.ts`
-- `proxy.ts`
-- `lib/insforge-client.ts`
-- `lib/insforge-server.ts`
-- `components/auth/LoginPanel.tsx`
+- `lib/posthog-client.ts`
+- `lib/posthog-server.ts`
+- `components/analytics/PostHogProvider.tsx`
+- `instrumentation-client.ts`
+- `app/layout.tsx`
 - `components/auth/AuthCallbackPanel.tsx`
-- `components/app/AppShell.tsx`
-- `components/app/AppPlaceholderPage.tsx`
-- `components/app/AppPlaceholderCard.tsx`
 - `components/app/SignOutButton.tsx`
+- `next.config.ts`
+- `posthog-setup-report.md`
 
 ## Decisions made
 
-- Use `proxy.ts` instead of `middleware.ts` because installed Next 16 docs mark middleware as renamed/deprecated.
-- Redirect authenticated users to `/dashboard` after OAuth, matching `context/project-overview.md` and `context/build-plan.md`.
-- Keep OAuth UI custom instead of using prebuilt InsForge auth components.
-- Use InsForge SSR helpers for server-owned cookies: callback sends only `insforge_code` and the PKCE verifier to `/api/auth/session`; the route exchanges the code server-side before setting cookies.
-- Protected routes verify the current InsForge user via `getCurrentUser()` before allowing access, instead of trusting cookie presence alone.
-- Placeholder app pages intentionally stay minimal until the full Profile, Find Jobs, and Dashboard features are built.
+- Project-local standards were treated as higher priority than the PostHog Wizard defaults: only the four approved product events remain in code.
+- Browser autocapture and pageview capture are disabled so PostHog does not emit generic events outside the approved list.
+- The app expects `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`, matching `context/code-standards.md`, rather than the wizard's prior `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` name.
+- The PostHog provider is intentionally non-visual and recorded in `context/ui-registry.md` as having no styles.
 
 ## Problems solved
 
-- OAuth start initially failed because `.env.local` had `NEXT_PUBLIC_INSFORGE_URL` set to the anon key instead of the backend URL. It was corrected to `https://u3vy75bd.us-east.insforge.app`.
-- Google OAuth previously returned to `/login?reason=protected` because browser SDK session state was not available as app-domain cookies. Fixed by exchanging the OAuth code through `/api/auth/session` and setting InsForge cookies on the app response.
-- Review found three auth issues and they were fixed:
-  - callback redirect now matches `/dashboard`;
-  - session route no longer accepts raw browser-posted access tokens;
-  - sign-out no longer silently redirects when local cookie clearing fails.
-- `next/font/google` still needs network access during `npm run build` to fetch Inter. Build passes when network access is approved.
+- Duplicate/custom wizard events such as sign-in, sign-out, OAuth, and CTA events were removed from the app so future dashboard analytics are based only on the approved feature events.
+- PostHog identify/reset is now behind shared helpers, so auth components do not import `posthog-js` directly.
+- `npm run lint` passes.
+- `./node_modules/.bin/tsc --noEmit` passes.
 
 ## Current state
 
-- `context/progress-tracker.md` marks Phase 1 Feature 02 Auth complete.
-- Next planned feature is Phase 1 Feature 03 PostHog Initialization.
-- `npm run lint` passes.
-- `npm run build` passes with network access for the existing Inter Google Font fetch.
-- Working tree is clean at the time this memory was saved.
-- Browser/dev-server QA was not run by the assistant because the developer said they will run the app themselves.
+- Review was run and found no TypeScript or lint failures.
+- Production build was not re-run to completion after the final `autocapture: false` change because the sandboxed build fails on the known Google Fonts network fetch and the developer said they will run it themselves.
+- Potential issue from review: `next.config.ts` still contains PostHog Wizard `/ingest` reverse-proxy rewrites, but `lib/posthog-client.ts` now sends directly to `NEXT_PUBLIC_POSTHOG_HOST`. Decide whether to keep the wizard proxy and set host to `/ingest`, or remove the unused rewrites.
+- Potential issue from review: if deployment environments only contain the wizard-created `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`, the current helpers will silently skip initialization. Ensure deployment envs include `NEXT_PUBLIC_POSTHOG_KEY`.
+- Minor review note: PostHog is initialized from both `instrumentation-client.ts` and `PostHogProvider`; a guard prevents duplicate init, but the two-entry pattern should be kept intentionally or simplified.
 
 ## Next session starts with
 
-Run `/remember restore`, then start Phase 1 Feature 03 PostHog Initialization:
+Resolve the review decisions before Phase 1 Feature 04 Database Schema:
 
-- fetch/read current docs for any library/API touched;
-- create `lib/posthog-client.ts` and `lib/posthog-server.ts`;
-- initialize PostHog in the root app layout;
-- wire `posthog.identify()` after successful login and `posthog.reset()` on logout;
-- update `context/progress-tracker.md` and `context/ui-registry.md` if any UI changes are made.
+- Confirm whether the project should preserve the PostHog Wizard reverse proxy by using `/ingest`, or use the project-standard direct host.
+- Confirm deployment env variable names for PostHog.
+- Run `npm run build` locally with network access for the existing Inter font fetch.
+- If the review decisions are accepted as-is, start Phase 1 Feature 04 Database Schema.
 
 ## Open questions
 
-- Developer still needs to confirm the OAuth flow visually in their local browser.
-- Database schema and RLS are not created yet; that is Phase 1 Feature 04 after PostHog.
+- Should PostHog Wizard-generated conversion/auth events remain out of the app permanently, or should `context/code-standards.md` be expanded to allow them?
+- Should `instrumentation-client.ts` alone initialize PostHog, or should the root `PostHogProvider` remain as the visible app-level integration point required by the build plan?
