@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
-  getInsforgeBrowserClient,
+  getInsforgeOAuthExchangeClient,
   hasInsforgeBrowserConfig,
 } from "@/lib/insforge-client";
 
@@ -21,21 +21,47 @@ export function AuthCallbackPanel() {
         return;
       }
 
-      const client = getInsforgeBrowserClient();
-      const { data, error } = await client.auth.getCurrentUser();
+      const code = new URLSearchParams(window.location.search).get(
+        "insforge_code",
+      );
+
+      if (!code) {
+        setMessage("Sign in could not be completed. Please try again.");
+        router.replace("/login");
+        return;
+      }
+
+      const client = getInsforgeOAuthExchangeClient();
+      const { data, error } = await client.auth.exchangeOAuthCode(code);
 
       if (!isMounted) {
         return;
       }
 
-      if (error || !data.user) {
+      if (error || !data?.accessToken) {
         console.error("[auth/callback]", error);
         setMessage("Sign in could not be completed. Please try again.");
         router.replace("/login");
         return;
       }
 
-      router.replace("/dashboard");
+      const sessionResponse = await fetch("/api/auth/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        }),
+      });
+
+      if (!sessionResponse.ok) {
+        console.error("[auth/callback]", await sessionResponse.text());
+        setMessage("Sign in could not be completed. Please try again.");
+        router.replace("/login");
+        return;
+      }
+
+      router.replace("/profile");
     }
 
     void finishAuth();

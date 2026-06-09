@@ -68,3 +68,5 @@ Update this file after every completed feature. Any AI agent reading this should
 - 2026-06-08 — `npm run lint` passes.
 - 2026-06-08 — `npm run build` passes after network approval for the existing Inter font fetch.
 - 2026-06-08 — Local browser QA not run by agent because the developer chose to run the dev server locally.
+- 2026-06-08 — Recovered OAuth start failure by correcting `.env.local`: `NEXT_PUBLIC_INSFORGE_URL` must be the InsForge backend URL, not the anon key.
+- 2026-06-09 — Recovered OAuth post-callback session loss by explicitly exchanging `insforge_code`, saving InsForge tokens into app-domain cookies through `/api/auth/session`, and redirecting new sign-ins to `/profile`.
