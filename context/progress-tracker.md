@@ -7,8 +7,8 @@ Update this file after every completed feature. Any AI agent reading this should
 ## Current Status
 
 **Phase:** Phase 1 — Foundation
-**Last completed:** 02 Auth
-**Next:** 03 PostHog Initialization
+**Last completed:** 03 PostHog Initialization
+**Next:** 04 Database Schema
 
 ---
 
@@ -18,7 +18,7 @@ Update this file after every completed feature. Any AI agent reading this should
 
 - [x] 01 Homepage
 - [x] 02 Auth
-- [ ] 03 PostHog Initialization
+- [x] 03 PostHog Initialization
 - [ ] 04 Database Schema
 
 ### Phase 2 — Profile Page
@@ -60,6 +60,7 @@ Update this file after every completed feature. Any AI agent reading this should
 - 2026-06-08 — OAuth button icons switched to `lucide-react`: Google uses `Globe` in accent color, GitHub uses `GitBranch` in default text color.
 - 2026-06-09 — Added basic protected placeholder UI for `/dashboard`, `/profile`, and `/find-jobs` to prevent post-auth 404s, with a working sign-out button.
 - 2026-06-09 — Hardened OAuth callback handling: the browser now carries only the PKCE verifier, `/api/auth/session` exchanges the OAuth code server-side before setting cookies, and `proxy.ts` verifies the current InsForge user before allowing protected routes.
+- 2026-06-09 — PostHog foundation completed with typed browser/server helpers, root provider initialization, client-side identify after OAuth callback, reset on sign-out, and enforcement of the four approved product event names only.
 
 ---
 
@@ -74,3 +75,4 @@ Update this file after every completed feature. Any AI agent reading this should
 - 2026-06-09 — Recovered OAuth post-callback session loss by explicitly exchanging `insforge_code`, saving InsForge tokens into app-domain cookies through `/api/auth/session`, and redirecting sign-ins to `/dashboard`.
 - 2026-06-09 — `npm run lint` and `npm run build` pass after adding placeholder app pages; build still needs network access for the existing Inter font fetch.
 - 2026-06-09 — Review fixes complete: post-login redirect matches the build plan, protected routes no longer trust cookie presence alone, and sign-out reports local cookie clear failures instead of silently redirecting.
+- 2026-06-09 — PostHog setup verified with `npm run lint` and `npm run build`; build still requires network access for the existing Inter font fetch.

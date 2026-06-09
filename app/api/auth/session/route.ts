@@ -1,8 +1,6 @@
 import { createServerClient, setAuthCookies } from "@insforge/sdk/ssr";
 import { NextResponse } from "next/server";
 
-import { getPostHogClient } from "@/lib/posthog-server";
-
 type SessionRequestBody = {
   code?: unknown;
   codeVerifier?: unknown;
@@ -13,9 +11,6 @@ function isSessionRequestBody(value: unknown): value is SessionRequestBody {
 }
 
 export async function POST(request: Request) {
-  const clientDistinctId = request.headers.get("X-POSTHOG-DISTINCT-ID");
-  const clientSessionId = request.headers.get("X-POSTHOG-SESSION-ID");
-
   try {
     const body: unknown = await request.json();
 
@@ -47,23 +42,6 @@ export async function POST(request: Request) {
         { status: 401 },
       );
     }
-
-    const posthog = getPostHogClient();
-    const distinctId = data.user.id ?? clientDistinctId ?? "anonymous";
-    posthog.capture({
-      distinctId,
-      event: "session_created",
-      properties: {
-        email: data.user.email,
-        ...(clientSessionId ? { $session_id: clientSessionId } : {}),
-        ...(clientDistinctId ? { $anon_distinct_id: clientDistinctId } : {}),
-      },
-    });
-    posthog.identify({
-      distinctId,
-      properties: { email: data.user.email },
-    });
-    await posthog.shutdown();
 
     const response = NextResponse.json({
       success: true,

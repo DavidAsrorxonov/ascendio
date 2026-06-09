@@ -2,7 +2,6 @@
 
 import { GitBranch, Globe, ShieldCheck } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import posthog from "posthog-js";
 import { useEffect, useMemo, useState } from "react";
 
 import {
@@ -85,8 +84,6 @@ export function LoginPanel() {
       setMessage("Authentication is not configured yet.");
       return;
     }
-
-    posthog.capture("oauth_initiated", { provider });
 
     setStatus("loading");
     setActiveProvider(provider);

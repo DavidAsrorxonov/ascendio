@@ -337,3 +337,23 @@ Last updated: 2026-06-09
 
 **Pattern notes:**
 Use this secondary button style for low-emphasis authenticated actions inside placeholder cards. Failed local sign-out shows a compact human-readable error below the button and keeps the user on the current page.
+
+### PostHog Provider
+
+File: components/analytics/PostHogProvider.tsx
+Last updated: 2026-06-09
+
+| Property         | Class             |
+| ---------------- | ----------------- |
+| Background       | none              |
+| Border           | none              |
+| Border radius    | none              |
+| Text — primary   | none              |
+| Text — secondary | none              |
+| Spacing          | none              |
+| Hover state      | none              |
+| Shadow           | none              |
+| Accent usage     | none              |
+
+**Pattern notes:**
+Non-visual root analytics provider. It must return children without wrappers, classes, or layout effects so instrumentation never changes page composition.

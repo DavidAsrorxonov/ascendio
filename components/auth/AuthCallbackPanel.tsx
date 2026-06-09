@@ -1,13 +1,26 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 
 import {
   hasInsforgeBrowserConfig,
   INSFORGE_OAUTH_CODE_VERIFIER_STORAGE_KEY,
 } from "@/lib/insforge-client";
+import { identifyPostHogUser } from "@/lib/posthog-client";
+
+type SessionResponseBody = {
+  data?: {
+    user?: {
+      id?: unknown;
+      email?: unknown;
+    };
+  };
+};
+
+function isSessionResponseBody(value: unknown): value is SessionResponseBody {
+  return Boolean(value && typeof value === "object");
+}
 
 export function AuthCallbackPanel() {
   const router = useRouter();
@@ -47,8 +60,6 @@ export function AuthCallbackPanel() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-POSTHOG-DISTINCT-ID": posthog.get_distinct_id(),
-            "X-POSTHOG-SESSION-ID": posthog.get_session_id() ?? "",
           },
           body: JSON.stringify({
             code,
@@ -66,26 +77,25 @@ export function AuthCallbackPanel() {
 
         if (!sessionResponse.ok) {
           console.error("[auth/callback]", await sessionResponse.text());
-          posthog.capture("sign_in_failed", { reason: "session_error" });
           setMessage("Sign in could not be completed. Please try again.");
           router.replace("/login");
           return;
         }
 
-        const sessionData = (await sessionResponse.json()) as {
-          data?: { user?: { id?: string; email?: string } };
-        };
-        const user = sessionData.data?.user;
-        if (user?.id) {
-          posthog.identify(user.id, { email: user.email });
+        const sessionData: unknown = await sessionResponse.json();
+        const user = isSessionResponseBody(sessionData)
+          ? sessionData.data?.user
+          : undefined;
+        if (typeof user?.id === "string") {
+          identifyPostHogUser(
+            user.id,
+            typeof user.email === "string" ? user.email : undefined,
+          );
         }
-        posthog.capture("sign_in_completed");
 
         router.replace("/dashboard");
       } catch (error) {
         console.error("[auth/callback]", error);
-        posthog.captureException(error);
-        posthog.capture("sign_in_failed", { reason: "exception" });
         setMessage("Sign in could not be completed. Please try again.");
         router.replace("/login");
       }
@@ -99,7 +109,7 @@ export function AuthCallbackPanel() {
   }, [router]);
 
   return (
-    <section className="w-full max-w-112 rounded-xl border border-border bg-surface p-6 text-center shadow-card">
+    <section className="w-full max-w-md rounded-xl border border-border bg-surface p-6 text-center shadow-card">
       <div className="mx-auto h-10 w-10 rounded-full border border-border bg-accent-muted p-2">
         <div className="h-full w-full rounded-full bg-accent" />
       </div>
