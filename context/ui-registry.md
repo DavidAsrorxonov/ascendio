@@ -277,3 +277,63 @@ Last updated: 2026-06-08
 
 **Pattern notes:**
 Callback state uses the same auth card shell with a compact accent indicator instead of a decorative loader or new animation pattern.
+
+### App Shell
+
+File: components/app/AppShell.tsx
+Last updated: 2026-06-09
+
+| Property         | Class                                                                 |
+| ---------------- | --------------------------------------------------------------------- |
+| Background       | `bg-background`                                                       |
+| Border           | inherited from `LandingNavbar`                                        |
+| Border radius    | none                                                                  |
+| Text — primary   | inherited from child components                                       |
+| Text — secondary | inherited from child components                                       |
+| Spacing          | `min-h-screen`, content `px-5 py-12 md:px-12`, `min-h-[calc(100vh-64px)]` |
+| Hover state      | inherited from `LandingNavbar`                                        |
+| Shadow           | inherited from child components                                       |
+| Accent usage     | inherited from `LandingNavbar`                                        |
+
+**Pattern notes:**
+Protected app pages reuse the landing navbar and center compact placeholder content on the token-backed page background until the full feature pages are built.
+
+### App Placeholder Card
+
+File: components/app/AppPlaceholderCard.tsx
+Last updated: 2026-06-09
+
+| Property         | Class                                                                    |
+| ---------------- | ------------------------------------------------------------------------ |
+| Background       | `bg-surface`                                                             |
+| Border           | `border border-border`                                                   |
+| Border radius    | `rounded-xl`                                                             |
+| Text — primary   | `text-2xl font-semibold leading-8 text-text-primary`                     |
+| Text — secondary | `text-base font-normal leading-7 text-text-secondary`, `text-sm text-text-muted` |
+| Spacing          | `p-6`, `mt-4`, `mt-3`, action area `mt-8`                                |
+| Hover state      | inherited from `SignOutButton`                                           |
+| Shadow           | `shadow-card`                                                            |
+| Accent usage     | none                                                                     |
+
+**Pattern notes:**
+Placeholder cards mirror the screenshot-provided simple post-auth state. Keep these cards quiet and compact until each full feature page replaces them.
+
+### Sign Out Button
+
+File: components/app/SignOutButton.tsx
+Last updated: 2026-06-09
+
+| Property         | Class                                                                           |
+| ---------------- | ------------------------------------------------------------------------------- |
+| Background       | `bg-surface`                                                                    |
+| Border           | `border border-border`                                                          |
+| Border radius    | `rounded-md`                                                                    |
+| Text — primary   | `text-sm font-medium text-text-primary`                                         |
+| Text — secondary | disabled `disabled:text-text-muted`                                             |
+| Spacing          | `px-4 py-2`                                                                     |
+| Hover state      | `hover:bg-surface-secondary`, `disabled:cursor-not-allowed disabled:text-text-muted` |
+| Shadow           | `shadow-card`                                                                   |
+| Accent usage     | none                                                                            |
+
+**Pattern notes:**
+Use this secondary button style for low-emphasis authenticated actions inside placeholder cards.

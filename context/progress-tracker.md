@@ -58,6 +58,7 @@ Update this file after every completed feature. Any AI agent reading this should
 - 2026-06-08 — Used `proxy.ts` instead of `middleware.ts` because installed Next 16 docs mark middleware as renamed/deprecated.
 - 2026-06-08 — Login UI revised to match the supplied split-card reference: navbar, left marketing panel, right OAuth provider controls, and smaller left headline scale.
 - 2026-06-08 — OAuth button icons switched to `lucide-react`: Google uses `Globe` in accent color, GitHub uses `GitBranch` in default text color.
+- 2026-06-09 — Added basic protected placeholder UI for `/dashboard`, `/profile`, and `/find-jobs` to prevent post-auth 404s, with a working sign-out button.
 
 ---
 
@@ -70,3 +71,4 @@ Update this file after every completed feature. Any AI agent reading this should
 - 2026-06-08 — Local browser QA not run by agent because the developer chose to run the dev server locally.
 - 2026-06-08 — Recovered OAuth start failure by correcting `.env.local`: `NEXT_PUBLIC_INSFORGE_URL` must be the InsForge backend URL, not the anon key.
 - 2026-06-09 — Recovered OAuth post-callback session loss by explicitly exchanging `insforge_code`, saving InsForge tokens into app-domain cookies through `/api/auth/session`, and redirecting new sign-ins to `/profile`.
+- 2026-06-09 — `npm run lint` and `npm run build` pass after adding placeholder app pages; build still needs network access for the existing Inter font fetch.
