@@ -221,7 +221,7 @@ Footer logo matches navbar logo at `h-9 w-auto`; footer nav is deliberately smal
 ### Auth Login Panel
 
 File: components/auth/LoginPanel.tsx
-Last updated: 2026-06-08
+Last updated: 2026-06-09
 
 | Property         | Class                                                                                                                       |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
@@ -236,7 +236,7 @@ Last updated: 2026-06-08
 | Accent usage     | Lucide `Globe` and `ShieldCheck` use `text-accent`, Lucide `GitBranch` uses `text-text-primary`, token-backed `landing-haze` |
 
 **Pattern notes:**
-Login uses a wide two-column card with a soft token-backed left haze and compact right-side OAuth controls. OAuth buttons use Lucide icons: `Globe` for Google in the accent token and `GitBranch` for GitHub in default text color. The left headline is intentionally smaller than the reference image while keeping the stacked bold rhythm.
+Login uses a wide two-column card with a soft token-backed left haze and compact right-side OAuth controls. OAuth buttons use Lucide icons: `Globe` for Google in the accent token and `GitBranch` for GitHub in default text color. The left headline is intentionally smaller than the reference image while keeping the stacked bold rhythm. OAuth starts with manual redirect handling so the PKCE verifier can be carried into the server-owned callback session route.
 
 ### Auth Login Fallback
 
@@ -261,7 +261,7 @@ Fallback mirrors the split login shell so Suspense loading does not shift the au
 ### Auth Callback Panel
 
 File: components/auth/AuthCallbackPanel.tsx
-Last updated: 2026-06-08
+Last updated: 2026-06-09
 
 | Property         | Class                                                                     |
 | ---------------- | ------------------------------------------------------------------------- |
@@ -276,7 +276,7 @@ Last updated: 2026-06-08
 | Accent usage     | `bg-accent-muted`, `bg-accent` status indicator                           |
 
 **Pattern notes:**
-Callback state uses the same auth card shell with a compact accent indicator instead of a decorative loader or new animation pattern.
+Callback state uses the same auth card shell with a compact accent indicator instead of a decorative loader or new animation pattern. Successful callbacks route to `/dashboard`.
 
 ### App Shell
 
@@ -329,11 +329,11 @@ Last updated: 2026-06-09
 | Border           | `border border-border`                                                          |
 | Border radius    | `rounded-md`                                                                    |
 | Text — primary   | `text-sm font-medium text-text-primary`                                         |
-| Text — secondary | disabled `disabled:text-text-muted`                                             |
-| Spacing          | `px-4 py-2`                                                                     |
+| Text — secondary | disabled `disabled:text-text-muted`, error message `text-sm font-normal leading-5 text-error` |
+| Spacing          | button `px-4 py-2`, message `mt-3`                                              |
 | Hover state      | `hover:bg-surface-secondary`, `disabled:cursor-not-allowed disabled:text-text-muted` |
 | Shadow           | `shadow-card`                                                                   |
 | Accent usage     | none                                                                            |
 
 **Pattern notes:**
-Use this secondary button style for low-emphasis authenticated actions inside placeholder cards.
+Use this secondary button style for low-emphasis authenticated actions inside placeholder cards. Failed local sign-out shows a compact human-readable error below the button and keeps the user on the current page.

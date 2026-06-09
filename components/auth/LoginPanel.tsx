@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   getInsforgeBrowserClient,
   hasInsforgeBrowserConfig,
+  INSFORGE_OAUTH_CODE_VERIFIER_STORAGE_KEY,
 } from "@/lib/insforge-client";
 
 type OAuthProvider = "google" | "github";
@@ -89,18 +90,26 @@ export function LoginPanel() {
     setMessage(null);
 
     const client = getInsforgeBrowserClient();
-    const { error } = await client.auth.signInWithOAuth(provider, {
+    const { data, error } = await client.auth.signInWithOAuth(provider, {
       redirectTo,
       additionalParams:
         provider === "google" ? { prompt: "select_account" } : undefined,
+      skipBrowserRedirect: true,
     });
 
-    if (error) {
+    if (error || !data.url || !data.codeVerifier) {
       console.error("[auth/login]", error);
       setStatus("idle");
       setActiveProvider(null);
       setMessage("Could not start sign in. Please try again.");
+      return;
     }
+
+    window.sessionStorage.setItem(
+      INSFORGE_OAUTH_CODE_VERIFIER_STORAGE_KEY,
+      data.codeVerifier,
+    );
+    window.location.assign(data.url);
   }
 
   return (
@@ -119,7 +128,7 @@ export function LoginPanel() {
           jobs, and creating tailored application materials.
         </p>
         <p className="mt-12 text-sm font-medium leading-5 text-text-secondary">
-          New users are routed to profile setup after sign-in.
+          New users are routed to the dashboard after sign-in.
         </p>
       </div>
 

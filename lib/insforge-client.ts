@@ -1,11 +1,12 @@
 "use client";
 
-import { createClient } from "@insforge/sdk";
 import { createBrowserClient } from "@insforge/sdk/ssr";
 import type { InsForgeClient } from "@insforge/sdk";
 
+export const INSFORGE_OAUTH_CODE_VERIFIER_STORAGE_KEY =
+  "ascendio.insforge.oauth.code_verifier";
+
 let insforgeClient: InsForgeClient | null = null;
-let insforgeOAuthExchangeClient: InsForgeClient | null = null;
 
 export function hasInsforgeBrowserConfig(): boolean {
   return Boolean(
@@ -23,16 +24,4 @@ export function getInsforgeBrowserClient(): InsForgeClient {
   }
 
   return insforgeClient;
-}
-
-export function getInsforgeOAuthExchangeClient(): InsForgeClient {
-  if (!insforgeOAuthExchangeClient) {
-    insforgeOAuthExchangeClient = createClient({
-      baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL,
-      anonKey: process.env.NEXT_PUBLIC_INSFORGE_ANON_KEY,
-      isServerMode: true,
-    });
-  }
-
-  return insforgeOAuthExchangeClient;
 }

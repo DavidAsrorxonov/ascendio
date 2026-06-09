@@ -1,8 +1,8 @@
 import {
+  clearAuthCookies,
   type CookieOptions,
   type CookieStore,
-  DEFAULT_ACCESS_TOKEN_COOKIE,
-  DEFAULT_REFRESH_TOKEN_COOKIE,
+  createServerClient,
   updateSession,
 } from "@insforge/sdk/ssr";
 import { NextResponse, type NextRequest } from "next/server";
@@ -78,16 +78,20 @@ export async function proxy(request: NextRequest) {
     responseCookies: new ResponseCookieAdapter(response),
   });
 
-  const hasAccessToken = Boolean(
-    session.accessToken ?? request.cookies.get(DEFAULT_ACCESS_TOKEN_COOKIE),
-  );
-  const hasRefreshToken = Boolean(
-    request.cookies.get(DEFAULT_REFRESH_TOKEN_COOKIE),
-  );
+  if (session.accessToken) {
+    const client = createServerClient({
+      baseUrl: process.env.NEXT_PUBLIC_INSFORGE_URL,
+      anonKey: process.env.NEXT_PUBLIC_INSFORGE_ANON_KEY,
+      accessToken: session.accessToken,
+    });
+    const { data, error } = await client.auth.getCurrentUser();
 
-  if (hasAccessToken || hasRefreshToken) {
-    return response;
+    if (!error && data.user) {
+      return response;
+    }
   }
+
+  clearAuthCookies(response.cookies);
 
   const loginUrl = new URL("/login", request.url);
   loginUrl.searchParams.set("reason", "protected");

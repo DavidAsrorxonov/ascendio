@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
-  getInsforgeOAuthExchangeClient,
   hasInsforgeBrowserConfig,
+  INSFORGE_OAUTH_CODE_VERIFIER_STORAGE_KEY,
 } from "@/lib/insforge-client";
 
 export function AuthCallbackPanel() {
@@ -16,52 +16,62 @@ export function AuthCallbackPanel() {
     let isMounted = true;
 
     async function finishAuth(): Promise<void> {
-      if (!hasInsforgeBrowserConfig()) {
-        setMessage("Authentication is not configured yet.");
-        return;
-      }
+      try {
+        if (!hasInsforgeBrowserConfig()) {
+          setMessage("Authentication is not configured yet.");
+          return;
+        }
 
-      const code = new URLSearchParams(window.location.search).get(
-        "insforge_code",
-      );
+        const code = new URLSearchParams(window.location.search).get(
+          "insforge_code",
+        );
 
-      if (!code) {
-        setMessage("Sign in could not be completed. Please try again.");
-        router.replace("/login");
-        return;
-      }
+        if (!code) {
+          setMessage("Sign in could not be completed. Please try again.");
+          router.replace("/login");
+          return;
+        }
 
-      const client = getInsforgeOAuthExchangeClient();
-      const { data, error } = await client.auth.exchangeOAuthCode(code);
+        const codeVerifier = window.sessionStorage.getItem(
+          INSFORGE_OAUTH_CODE_VERIFIER_STORAGE_KEY,
+        );
 
-      if (!isMounted) {
-        return;
-      }
+        if (!codeVerifier) {
+          setMessage("Sign in could not be completed. Please try again.");
+          router.replace("/login");
+          return;
+        }
 
-      if (error || !data?.accessToken) {
+        const sessionResponse = await fetch("/api/auth/session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code,
+            codeVerifier,
+          }),
+        });
+
+        window.sessionStorage.removeItem(
+          INSFORGE_OAUTH_CODE_VERIFIER_STORAGE_KEY,
+        );
+
+        if (!isMounted) {
+          return;
+        }
+
+        if (!sessionResponse.ok) {
+          console.error("[auth/callback]", await sessionResponse.text());
+          setMessage("Sign in could not be completed. Please try again.");
+          router.replace("/login");
+          return;
+        }
+
+        router.replace("/dashboard");
+      } catch (error) {
         console.error("[auth/callback]", error);
         setMessage("Sign in could not be completed. Please try again.");
         router.replace("/login");
-        return;
       }
-
-      const sessionResponse = await fetch("/api/auth/session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-        }),
-      });
-
-      if (!sessionResponse.ok) {
-        console.error("[auth/callback]", await sessionResponse.text());
-        setMessage("Sign in could not be completed. Please try again.");
-        router.replace("/login");
-        return;
-      }
-
-      router.replace("/profile");
     }
 
     void finishAuth();
