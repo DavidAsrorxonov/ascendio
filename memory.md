@@ -1,63 +1,42 @@
-# Memory — PostHog Initialization Review
+# Memory — Database Schema Foundation
 
-Last updated: 2026-06-09 21:51 JST
+Last updated: 2026-06-10 18:18 JST
 
 ## What was built
 
-Phase 1 Feature 03 PostHog Initialization is currently implemented in the working tree.
+Phase 1 Feature 04 Database Schema is complete.
 
-- Added `lib/posthog-client.ts` with typed helpers for the four approved product events, browser initialization, `identifyPostHogUser()`, and `resetPostHog()`.
-- Added `lib/posthog-server.ts` with a typed server capture helper using `posthog-node`, `flushAt: 1`, `flushInterval: 0`, and `shutdown()` in a `finally` block.
-- Added `components/analytics/PostHogProvider.tsx` and wrapped the root layout in it.
-- `instrumentation-client.ts` also initializes PostHog through the shared helper.
-- OAuth callback now identifies the PostHog user after the InsForge session is created; sign-out resets PostHog after auth cookies are cleared.
-- Removed previously wizard-added custom auth/CTA event captures from app code, because `context/code-standards.md` allows only `job_search_started`, `job_found`, `profile_completed`, and `company_researched`.
-- Updated `context/progress-tracker.md`, `context/ui-registry.md`, and `posthog-setup-report.md` for the current PostHog state.
-
-Important files:
-
-- `lib/posthog-client.ts`
-- `lib/posthog-server.ts`
-- `components/analytics/PostHogProvider.tsx`
-- `instrumentation-client.ts`
-- `app/layout.tsx`
-- `components/auth/AuthCallbackPanel.tsx`
-- `components/app/SignOutButton.tsx`
-- `next.config.ts`
-- `posthog-setup-report.md`
+- Created live InsForge tables: `profiles`, `agent_runs`, `jobs`, and `agent_logs`.
+- Added ownership-scoped row level security policies to all four tables using `auth.uid()`.
+- Added database constraints, foreign keys, indexes, and `updated_at` triggers needed by upcoming profile, job discovery, job details, and dashboard features.
+- Created private InsForge Storage bucket `resumes`.
+- Updated `context/progress-tracker.md` to mark Feature 04 complete and set the next feature to `05 Profile Page — Full UI`.
+- Updated `context/ui-registry.md` with a backend-only entry noting that Feature 04 introduced no UI classes or components.
 
 ## Decisions made
 
-- Project-local standards were treated as higher priority than the PostHog Wizard defaults: only the four approved product events remain in code.
-- Browser autocapture and pageview capture are disabled so PostHog does not emit generic events outside the approved list.
-- The app expects `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`, matching `context/code-standards.md`, rather than the wizard's prior `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` name.
-- The PostHog provider is intentionally non-visual and recorded in `context/ui-registry.md` as having no styles.
+- Feature 04 was treated as live InsForge infrastructure work, implemented through MCP tools rather than local app logic.
+- RLS ownership is enforced at the database layer: `profiles.id = auth.uid()` and other tables use `user_id = auth.uid()`.
+- No resume-tailoring columns were added to `jobs`, because resume tailoring is explicitly out of scope in `context/project-overview.md`.
+- `profiles` includes `completion_percentage` and `missing_fields` to support Feature 06 profile completion behavior.
+- The `resumes` bucket is private, matching the authenticated-access-only requirement.
 
 ## Problems solved
 
-- Duplicate/custom wizard events such as sign-in, sign-out, OAuth, and CTA events were removed from the app so future dashboard analytics are based only on the approved feature events.
-- PostHog identify/reset is now behind shared helpers, so auth components do not import `posthog-js` directly.
-- `npm run lint` passes.
-- `./node_modules/.bin/tsc --noEmit` passes.
+- Verified the backend supports `auth.uid()`, `auth.role()`, `auth.jwt()`, `auth.users`, and `pgcrypto` before writing schema.
+- Verified the schema after creation through InsForge MCP: all four tables exist, RLS is enabled and forced, each table has four ownership policies, constraints/indexes are present, and the `resumes` bucket is private.
 
 ## Current state
 
-- Review was run and found no TypeScript or lint failures.
-- Production build was not re-run to completion after the final `autocapture: false` change because the sandboxed build fails on the known Google Fonts network fetch and the developer said they will run it themselves.
-- Potential issue from review: `next.config.ts` still contains PostHog Wizard `/ingest` reverse-proxy rewrites, but `lib/posthog-client.ts` now sends directly to `NEXT_PUBLIC_POSTHOG_HOST`. Decide whether to keep the wizard proxy and set host to `/ingest`, or remove the unused rewrites.
-- Potential issue from review: if deployment environments only contain the wizard-created `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`, the current helpers will silently skip initialization. Ensure deployment envs include `NEXT_PUBLIC_POSTHOG_KEY`.
-- Minor review note: PostHog is initialized from both `instrumentation-client.ts` and `PostHogProvider`; a guard prevents duplicate init, but the two-entry pattern should be kept intentionally or simplified.
+- Phase 1 Foundation is complete: Homepage, Auth, PostHog Initialization, and Database Schema are done.
+- The next planned feature is Phase 2 Feature 05 Profile Page — Full UI.
+- Git working tree was clean at the time of saving memory.
+- No app tests were run for Feature 04 because the feature changed live backend infrastructure and markdown tracking files only.
 
 ## Next session starts with
 
-Resolve the review decisions before Phase 1 Feature 04 Database Schema:
-
-- Confirm whether the project should preserve the PostHog Wizard reverse proxy by using `/ingest`, or use the project-standard direct host.
-- Confirm deployment env variable names for PostHog.
-- Run `npm run build` locally with network access for the existing Inter font fetch.
-- If the review decisions are accepted as-is, start Phase 1 Feature 04 Database Schema.
+Run `/remember restore`, then begin Feature 05 Profile Page — Full UI. Before implementing, read the required context files in AGENTS.md order and use `/architect` if treating the profile page as a complex feature. Build the full profile page UI with mock data only; do not wire save logic yet.
 
 ## Open questions
 
-- Should PostHog Wizard-generated conversion/auth events remain out of the app permanently, or should `context/code-standards.md` be expanded to allow them?
-- Should `instrumentation-client.ts` alone initialize PostHog, or should the root `PostHogProvider` remain as the visible app-level integration point required by the build plan?
+- None for Feature 04.
