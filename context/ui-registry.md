@@ -18,6 +18,126 @@ After building any component — update this file with the component name, file 
 
 ## Components
 
+### App Navbar
+
+File: components/app/AppNavbar.tsx
+Last updated: 2026-06-10
+
+| Property         | Class                                                                 |
+| ---------------- | --------------------------------------------------------------------- |
+| Background       | `bg-surface`                                                          |
+| Border           | `border-b border-border`, active `border-b-2 border-accent`           |
+| Border radius    | none                                                                  |
+| Text — primary   | `text-sm font-medium text-accent`, `text-text-secondary`              |
+| Text — secondary | none                                                                  |
+| Spacing          | `h-16 px-5 md:px-6 gap-8 px-1`                                        |
+| Hover state      | `hover:text-accent`, `transition-colors`                              |
+| Shadow           | none                                                                  |
+| Accent usage     | `text-accent`, `border-accent` for active route and active icon state |
+
+**Pattern notes:**
+Protected app pages use this compact navbar instead of the landing CTA navbar. Active state is an accent text/icon color plus bottom border, matching the profile reference.
+
+### Profile Attention Banner
+
+File: components/profile/ProfileAttentionBanner.tsx
+Last updated: 2026-06-10
+
+| Property         | Class                                                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------------------------ |
+| Background       | `bg-surface`, tag `bg-[color-mix(in_srgb,var(--color-error)_10%,var(--color-surface))]`                |
+| Border           | `border border-[color-mix(in_srgb,var(--color-error)_18%,var(--color-border))]`                        |
+| Border radius    | `rounded-xl`, progress `rounded-full`, tags `rounded-sm`                                               |
+| Text — primary   | `text-[22px] font-bold text-text-primary`, progress `text-[30px] font-bold text-text-primary`          |
+| Text — secondary | `text-sm font-medium text-text-secondary`, tags `text-xs font-bold text-error`                         |
+| Spacing          | `px-8 py-9 gap-2 mt-3 mt-5`                                                                            |
+| Hover state      | none                                                                                                   |
+| Shadow           | `shadow-card`                                                                                          |
+| Accent usage     | `text-error` and token-based conic ring show missing profile status                                    |
+
+**Pattern notes:**
+Profile warning states use a white card with token-mixed red border and soft red badges. The completion ring is built from token-backed arbitrary values, not hardcoded colors.
+
+### Profile Resume Section
+
+File: components/profile/ProfileResumeSection.tsx
+Last updated: 2026-06-10
+
+| Property         | Class                                                                                   |
+| ---------------- | --------------------------------------------------------------------------------------- |
+| Background       | `bg-surface`, upload area `bg-surface-secondary`                                        |
+| Border           | `border border-border`, upload area `border border-dashed border-border`                |
+| Border radius    | `rounded-xl`, buttons `rounded-md`, upload icon `rounded-full`                          |
+| Text — primary   | `text-[22px] font-bold text-text-primary`, upload title `text-base font-bold`           |
+| Text — secondary | `text-sm font-semibold text-text-muted`, upload note `text-sm font-medium text-text-secondary` |
+| Spacing          | `p-8 mt-8 px-6 py-10 mt-6 pt-8 gap-2 px-5 py-3`                                        |
+| Hover state      | `hover:bg-surface-secondary`, `hover:bg-accent-dark`, `transition-colors`               |
+| Shadow           | `shadow-card`                                                                           |
+| Accent usage     | `text-accent` upload icon, `bg-accent text-accent-foreground` generate button           |
+
+**Pattern notes:**
+Resume controls are presentational only in Feature 05. The upload area uses a dashed token border and muted secondary surface; primary document generation uses the standard accent button.
+
+### Profile Connected Accounts
+
+File: components/profile/ProfileConnectedAccounts.tsx
+Last updated: 2026-06-10
+
+| Property         | Class                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| Background       | `bg-surface`, LinkedIn icon shell `bg-linkedin-light`, icon mark `bg-linkedin`         |
+| Border           | `border border-border`                                                                |
+| Border radius    | `rounded-xl`, icon shell `rounded-lg`, icon mark `rounded-sm`                         |
+| Text — primary   | `text-[22px] font-bold text-text-primary`, row title `text-xl font-bold`              |
+| Text — secondary | `text-lg font-normal text-text-secondary`, status `text-base font-normal text-text-muted` |
+| Spacing          | `p-8 mt-3 mt-8 px-8 py-6 gap-5 gap-6 px-8 py-4`                                      |
+| Hover state      | `hover:bg-info-dark`, `transition-colors`                                             |
+| Shadow           | `shadow-card`                                                                         |
+| Accent usage     | `bg-linkedin text-linkedin-foreground` for LinkedIn brand action                      |
+
+**Pattern notes:**
+Connected account cards use a white outer card and bordered inner row. The LinkedIn action intentionally uses the LinkedIn token instead of the app accent to match the provided reference.
+
+### Profile Select Field
+
+File: components/profile/ProfileSelectField.tsx
+Last updated: 2026-06-10
+
+| Property         | Class                                                                                         |
+| ---------------- | --------------------------------------------------------------------------------------------- |
+| Background       | trigger `bg-surface`, chevron `bg-surface-secondary`, dropdown `bg-overlay`, selected row `bg-overlay-dark` |
+| Border           | trigger `border border-border`, open/dropdown `border-accent`                                 |
+| Border radius    | trigger `rounded-md`, dropdown `rounded-xl`, chevron `rounded-md`                             |
+| Text — primary   | trigger `text-sm font-semibold text-text-primary`, dropdown `text-base font-semibold text-surface` |
+| Text — secondary | label `text-xs font-bold uppercase text-text-secondary`, chevron `text-text-secondary`        |
+| Spacing          | trigger `h-11 px-4`, dropdown `mt-2 py-2`, options `gap-3 px-4 py-3`, icon `size-7`           |
+| Hover state      | trigger `hover:border-accent hover:bg-surface-secondary`, options `hover:bg-accent`, `transition-colors` |
+| Shadow           | `shadow-card`                                                                                 |
+| Accent usage     | `focus:border-accent focus:ring-1 focus:ring-accent`, open `ring-accent`, dropdown `border-accent` |
+
+**Pattern notes:**
+Profile selects use a custom client-side listbox because native expanded select menus cannot be reliably styled across browsers. Open state uses a dark token-backed floating menu, accent border, selected checkmark, hover rows, and a rotating chevron.
+
+### Profile Information Form
+
+File: components/profile/ProfileInformationForm.tsx
+Last updated: 2026-06-10
+
+| Property         | Class                                                                                          |
+| ---------------- | ---------------------------------------------------------------------------------------------- |
+| Background       | `bg-surface`, filled inputs/tags `bg-surface-secondary`, work block `bg-surface-secondary`      |
+| Border           | `border border-border`, section dividers `border-t border-border`                              |
+| Border radius    | `rounded-xl`, controls `rounded-md`, checkbox `rounded-sm`                                     |
+| Text — primary   | `text-[22px] font-bold text-text-primary`, section `text-base font-bold text-text-primary`      |
+| Text — secondary | labels `text-xs font-bold uppercase text-text-secondary`, help `text-sm font-semibold text-text-muted` |
+| Spacing          | `p-8 mt-6 pt-8 mt-12 pt-10 gap-x-6 gap-y-5 h-11 px-4 py-3`                                    |
+| Hover state      | `hover:bg-surface-tertiary`, `hover:text-accent-dark`, `hover:bg-accent-dark`                  |
+| Shadow           | `shadow-card` on outer card and save button                                                    |
+| Accent usage     | `focus:border-accent focus:ring-1 focus:ring-accent`, `bg-accent text-accent-foreground` save button |
+
+**Pattern notes:**
+Profile form fields use uppercase 12px labels, 44px-tall controls, token borders, and accent focus rings. Mock data is rendered with uncontrolled form defaults until Feature 06 wires save logic.
+
 ### Database Schema
 
 File: InsForge backend

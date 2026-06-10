@@ -6,9 +6,9 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ## Current Status
 
-**Phase:** Phase 1 — Foundation
-**Last completed:** 04 Database Schema
-**Next:** 05 Profile Page — Full UI
+**Phase:** Phase 2 — Profile Page
+**Last completed:** 05 Profile Page — Full UI
+**Next:** 06 Profile Save Logic
 
 ---
 
@@ -23,7 +23,7 @@ Update this file after every completed feature. Any AI agent reading this should
 
 ### Phase 2 — Profile Page
 
-- [ ] 05 Profile Page — Full UI
+- [x] 05 Profile Page — Full UI
 - [ ] 06 Profile Save Logic
 - [ ] 07 AI Profile Extraction from Resume
 - [ ] 08 Resume PDF Generation from Profile
@@ -61,6 +61,9 @@ Update this file after every completed feature. Any AI agent reading this should
 - 2026-06-09 — Added basic protected placeholder UI for `/dashboard`, `/profile`, and `/find-jobs` to prevent post-auth 404s, with a working sign-out button.
 - 2026-06-09 — Hardened OAuth callback handling: the browser now carries only the PKCE verifier, `/api/auth/session` exchanges the OAuth code server-side before setting cookies, and `proxy.ts` verifies the current InsForge user before allowing protected routes.
 - 2026-06-09 — PostHog foundation completed with typed browser/server helpers, root provider initialization, client-side identify after OAuth callback, reset on sign-out, and enforcement of the four approved product event names only.
+- 2026-06-10 — Profile page full UI built against `context/designs/profile.png` with mock data only. Added a protected app navbar, profile attention banner, resume upload/generate panel, and full profile information form. No save, upload, extraction, or generation logic was wired.
+- 2026-06-10 — Profile page UI refined with a LinkedIn connected-account card under the profile attention banner and reusable styled select controls replacing browser-default select presentation.
+- 2026-06-10 — Profile select controls were upgraded from native expanded menus to custom token-styled dropdown listboxes so the open state can match the application UI.
 
 ---
 
@@ -78,3 +81,6 @@ Update this file after every completed feature. Any AI agent reading this should
 - 2026-06-09 — PostHog setup verified with `npm run lint` and `npm run build`; build still requires network access for the existing Inter font fetch.
 - 2026-06-09 — Database schema created directly in InsForge through MCP infrastructure tools. `profiles`, `agent_runs`, `jobs`, and `agent_logs` are live with ownership-scoped RLS policies using `auth.uid()`, practical constraints, indexes, and timestamp triggers.
 - 2026-06-09 — Created private InsForge Storage bucket `resumes` for authenticated resume PDF access. No tailoring-specific columns were added because resume tailoring is out of scope.
+- 2026-06-10 — Profile page UI verified with `npm run lint` and `npm run build`. Build required network access for the existing Inter font fetch. Browser QA was not run because the developer will run the local server.
+- 2026-06-10 — Profile UI refinements verified with `npm run lint` and `npm run build`; build still requires network access for the existing Inter font fetch.
+- 2026-06-10 — Custom select dropdown refinement passed `npm run lint`. `npm run build` was blocked by repeated external Google Fonts fetch failures from `fonts.gstatic.com` after the approved network retry, not by TypeScript or lint errors.
